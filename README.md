@@ -5,7 +5,12 @@ This config self-sign new applications automatically and make them available to 
 ## Prerequisite
 
 - A server with a working installation of docker and docker-compose
-- A domain with the following DNS record:
+- A domain with the following DNS records:
+```
+Type    Name     Value
+A       @        <VPS_IP>
+```
+This record tells that the URL `example.com` should point to the VPS IP.
 ```
 Type    Name     Value
 A       *        <VPS_IP>
