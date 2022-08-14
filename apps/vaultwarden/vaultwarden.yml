@@ -1,0 +1,17 @@
+version: "3.3"
+
+services:
+  vaultwarden:
+    image: vaultwarden/server
+    container_name: "vaultwarden"
+    env_file: ".env"
+    restart: on-failure
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.vaultwarden.loadBalancer.server.port=80"
+      - "traefik.http.routers.vaultwarden.rule=Host(`bw.${BASE_DOMAIN}`)"
+      - "traefik.http.routers.vaultwarden.entrypoints=websecure"
+      - "traefik.http.routers.vaultwarden.tls.certresolver=myresolver"
+    volumes:
+      - ".data:/data"
+      

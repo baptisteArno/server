@@ -1,0 +1,34 @@
+version: "3.3"
+
+services:
+  traefik:
+    image: "traefik:v2.8"
+    container_name: "traefik"
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.myresolver.acme.email=${ACME_EMAIL}"
+      - "--certificatesresolvers.myresolver.acme.storage=/acme.json"
+    ports:
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - "${ACME_FILE_PATH}:/acme.json"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    restart: always
+
+  n8n:
+    extends:
+      file: apps/n8n/n8n.yml
+      service: n8n
+
+  vaultwarden:
+    extends:
+      file: apps/vaultwarden/vaultwarden.yml
+      service: vaultwarden
+
