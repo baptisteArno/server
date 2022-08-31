@@ -59,3 +59,9 @@ newapp:
 ```
 
 3. It should create an app available at https://newapp.example.com 🚀
+
+### Upgrade an app
+
+```sh
+docker-compose up -d --build app
+```

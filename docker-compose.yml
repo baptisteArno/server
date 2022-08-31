@@ -22,13 +22,29 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     restart: always
 
+  # N8N (https://github.com/n8n-io/n8n)
   n8n:
     extends:
-      file: apps/n8n/n8n.yml
+      file: apps/n8n/docker-compose.yml
       service: n8n
 
+  # Vaultwarden (https://github.com/dani-garcia/vaultwarden)
   vaultwarden:
     extends:
-      file: apps/vaultwarden/vaultwarden.yml
+      file: apps/vaultwarden/docker-compose.yml
       service: vaultwarden
+
+  # Plausible (https://github.com/plausible/analytics)
+  plausible:
+    extends:
+      file: apps/plausible/docker-compose.yml
+      service: plausible
+  plausible_db:
+    extends:
+      file: apps/plausible/docker-compose.yml
+      service: plausible_db
+  plausible_events_db:
+    extends:
+      file: apps/plausible/docker-compose.yml
+      service: plausible_events_db
 
