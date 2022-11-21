@@ -34,6 +34,12 @@ services:
       file: apps/vaultwarden/docker-compose.yml
       service: vaultwarden
 
+  # PgHero (https://github.com/ankane/pghero)
+  pghero:
+    extends:
+      file: apps/pghero/docker-compose.yml
+      service: pghero
+
   # Plausible (https://github.com/plausible/analytics)
   plausible:
     extends:
