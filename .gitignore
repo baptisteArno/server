@@ -1,6 +1,4 @@
 acme.json
-.env
-.data
-.n8n
-.db-data
-.event-data
+.*
+!.env.example
+!.config.example.yml

@@ -1,0 +1,61 @@
+version: "3.3"
+
+services:
+  grafana:
+    user: "0"
+    image: grafana/grafana-oss
+    container_name: "grafana"
+    restart: on-failure
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.grafana.loadBalancer.server.port=3000"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.${BASE_DOMAIN}`)"
+      - "traefik.http.routers.grafana.entrypoints=websecure"
+      - "traefik.http.routers.grafana.tls.certresolver=myresolver"
+    volumes:
+      - ".grafana:/var/lib/grafana"
+
+  prometheus:
+    user: "0"
+    image: prom/prometheus
+    container_name: prometheus
+    restart: on-failure
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.prometheus.loadBalancer.server.port=9090"
+      - "traefik.http.routers.prometheus.rule=Host(`prometheus.${BASE_DOMAIN}`)"
+      - "traefik.http.routers.prometheus.entrypoints=websecure"
+      - "traefik.http.routers.prometheus.tls.certresolver=myresolver"
+    command:
+      - '--config.file=/etc/prometheus/.config.yml'
+      - '--storage.tsdb.path=/prometheus'
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - .prometheus:/prometheus
+
+  # System monitoring
+  node_exporter:
+    image: quay.io/prometheus/node-exporter
+    container_name: node_exporter
+    command:
+      - '--path.rootfs=/host'
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - '/:/host:ro,rslave'
+
+  # Docker monitoring
+  cadvisor:
+    # Latest tag is not updated, check latest release https://github.com/google/cadvisor/releases
+    image: gcr.io/cadvisor/cadvisor:v0.46.0
+    container_name: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    devices:
+      - /dev/kmsg
+    restart: unless-stopped
+    privileged: true

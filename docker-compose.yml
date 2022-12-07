@@ -41,16 +41,35 @@ services:
       service: pghero
 
   # Plausible (https://github.com/plausible/analytics)
-  plausible:
+  # plausible:
+  #   extends:
+  #     file: apps/plausible/docker-compose.yml
+  #     service: plausible
+  # plausible_db:
+  #   extends:
+  #     file: apps/plausible/docker-compose.yml
+  #     service: plausible_db
+  # plausible_events_db:
+  #   extends:
+  #     file: apps/plausible/docker-compose.yml
+  #     service: plausible_events_db
+
+  # Grafana (https://github.com/grafana/grafana)
+  grafana:
     extends:
-      file: apps/plausible/docker-compose.yml
-      service: plausible
-  plausible_db:
+      file: apps/grafana/docker-compose.yml
+      service: grafana
+  # Prometheus (https://github.com/prometheus/prometheus)
+  prometheus:
     extends:
-      file: apps/plausible/docker-compose.yml
-      service: plausible_db
-  plausible_events_db:
+      file: apps/grafana/docker-compose.yml
+      service: prometheus
+  node_exporter:
     extends:
-      file: apps/plausible/docker-compose.yml
-      service: plausible_events_db
+      file: apps/grafana/docker-compose.yml
+      service: node_exporter
+  cadvisor:
+    extends:
+      file: apps/grafana/docker-compose.yml
+      service: cadvisor
 
