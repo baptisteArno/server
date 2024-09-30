@@ -63,5 +63,6 @@ newapp:
 ### Upgrade an app
 
 ```sh
-docker-compose up -d --force-recreate --no-deps --build app
+docker compose pull app
+docker compose up -d --force-recreate --no-deps --build app
 ```

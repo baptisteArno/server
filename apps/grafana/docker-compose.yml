@@ -6,6 +6,7 @@ services:
     image: grafana/grafana-oss
     container_name: "grafana"
     restart: on-failure
+    env_file: ".env"
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.grafana.loadBalancer.server.port=3000"
